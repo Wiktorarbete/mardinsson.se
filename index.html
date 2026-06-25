@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mardinsson Bilskadecenter AB – Helsingborg</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; color: #1e293b; }
+
+    /* NAV */
+    .nav { background: #0a1628; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { color: #fff; font-size: 18px; font-weight: 500; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-icon { width: 36px; height: 36px; background: #1e3a8a; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .nav-logo-icon i { color: #fff; font-size: 18px; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { color: #94a3b8; font-size: 14px; text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+    .nav-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .nav-phone { color: #fff; font-size: 15px; font-weight: 500; display: flex; align-items: center; gap: 6px; text-decoration: none; }
+    .nav-phone i { color: #93c5fd; }
+    .nav-hours { color: #64748b; font-size: 12px; }
+
+    /* HERO */
+    .hero { background: #0f1f3d; color: #fff; padding: 5rem 2rem 4rem; text-align: center; }
+    .hero-eyebrow { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #93c5fd; margin-bottom: 1rem; }
+    .hero-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 500; line-height: 1.15; margin-bottom: 1rem; }
+    .hero-title span { color: #3b82f6; }
+    .hero-sub { font-size: 1rem; color: #94a3b8; max-width: 460px; margin: 0 auto 2rem; line-height: 1.7; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 8px; background: #1d4ed8; color: #fff; padding: 14px 28px; border-radius: 6px; font-size: 15px; font-weight: 500; border: none; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+    .hero-cta:hover { background: #1e40af; }
+    .badge-row { display: flex; justify-content: center; gap: 2rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .badge { display: flex; align-items: center; gap: 6px; color: #64748b; font-size: 13px; }
+    .badge i { color: #3b82f6; }
+
+    /* SECTIONS */
+    .section { padding: 4rem 2rem; max-width: 920px; margin: 0 auto; }
+    .section-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #3b82f6; margin-bottom: 0.5rem; }
+    .section-title { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 500; color: #1e293b; margin-bottom: 0.75rem; }
+    .section-body { font-size: 15px; color: #64748b; line-height: 1.7; max-width: 540px; }
+
+    /* SERVICES */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2.5rem 0; }
+    .service-card { background: #fff; padding: 1.5rem; cursor: pointer; transition: all 0.25s; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .service-card:hover { border-color: #3b82f6; box-shadow: 0 4px 16px rgba(59,130,246,0.12); transform: translateY(-2px); }
+    .service-icon { width: 44px; height: 44px; background: #eff6ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #1d4ed8; margin-bottom: 0.75rem; }
+    .service-card:hover .service-icon { background: #1d4ed8; }
+    .service-card:hover .service-icon i { color: #fff; }
+    .service-name { font-size: 15px; font-weight: 600; color: #1e293b; margin-bottom: 4px; }
+    .service-short { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+    .service-card .read-more { font-size: 12px; color: #3b82f6; margin-top: 10px; display: flex; align-items: center; gap: 4px; font-weight: 500; opacity: 0; transition: opacity 0.2s; }
+    .service-card:hover .read-more { opacity: 1; }
+
+    /* SERVICE MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10, 22, 40, 0.7); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #fff; border-radius: 16px; max-width: 540px; width: 100%; padding: 2rem; position: relative; max-height: 90vh; overflow-y: auto; }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 22px; cursor: pointer; color: #64748b; }
+    .modal-close:hover { color: #1e293b; }
+    .modal-icon { font-size: 32px; color: #1d4ed8; margin-bottom: 1rem; }
+    .modal h3 { font-size: 1.3rem; font-weight: 500; margin-bottom: 0.75rem; color: #1e293b; }
+    .modal p { font-size: 15px; color: #64748b; line-height: 1.7; margin-bottom: 1rem; }
+    .modal ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    .modal ul li { font-size: 14px; color: #64748b; line-height: 1.8; }
+    .modal .modal-cta { display: inline-flex; align-items: center; gap: 8px; background: #1d4ed8; color: #fff; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.2s; }
+    .modal .modal-cta:hover { background: #1e40af; }
+
+    /* STEPS */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 2rem; margin-top: 2.5rem; }
+    .step-num { font-size: 2.5rem; font-weight: 500; color: #1d4ed8; line-height: 1; margin-bottom: 8px; }
+    .step-title { font-size: 15px; font-weight: 500; color: #1e293b; margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: #64748b; line-height: 1.5; }
+
+    /* REVIEWS */
+    .reviews { background: #f8fafc; padding: 4rem 2rem; }
+    .reviews-inner { max-width: 1200px; margin: 0 auto; }
+    .reviews-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; }
+    .google-rating { display: flex; align-items: center; gap: 1rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem 1.5rem; margin-top: 1rem; }
+    .google-logo { width: 32px; height: 32px; flex-shrink: 0; }
+    .google-rating-number { font-size: 2rem; font-weight: 600; color: #1e293b; line-height: 1; }
+    .google-rating-detail { display: flex; flex-direction: column; gap: 2px; }
+    .google-rating-stars { color: #f59e0b; font-size: 16px; letter-spacing: 1px; }
+    .google-rating-count { font-size: 12px; color: #94a3b8; }
+    .reviews-scroll-wrap { position: relative; margin-top: 2rem; }
+    .reviews-grid { display: flex; gap: 1rem; overflow-x: hidden; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+    .reviews-scroll-wrap .scroll-zone { position: absolute; top: 0; bottom: 0; width: 80px; z-index: 5; cursor: pointer; }
+    .reviews-scroll-wrap .scroll-zone-left { left: 0; background: linear-gradient(to right, rgba(248,250,252,0.9), transparent); }
+    .reviews-scroll-wrap .scroll-zone-right { right: 0; background: linear-gradient(to left, rgba(248,250,252,0.9), transparent); }
+    .reviews-scroll-wrap .scroll-zone::after { content: ''; position: absolute; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; background: #fff; border: 1px solid #e2e8f0; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; }
+    .reviews-scroll-wrap .scroll-zone-left::after { left: 12px; }
+    .reviews-scroll-wrap .scroll-zone-right::after { right: 12px; }
+    .reviews-scroll-wrap .scroll-zone-left::before { content: '‹'; position: absolute; top: 50%; left: 20px; transform: translateY(-50%); z-index: 6; font-size: 18px; font-weight: 700; color: #1d4ed8; }
+    .reviews-scroll-wrap .scroll-zone-right::before { content: '›'; position: absolute; top: 50%; right: 20px; transform: translateY(-50%); z-index: 6; font-size: 18px; font-weight: 700; color: #1d4ed8; }
+    .review-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; min-width: 280px; max-width: 320px; flex-shrink: 0; }
+    .review-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .review-avatar { width: 36px; height: 36px; border-radius: 50%; background: #1d4ed8; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0; }
+    .review-meta { display: flex; flex-direction: column; }
+    .review-author { font-size: 13px; font-weight: 500; color: #1e293b; }
+    .review-date { font-size: 11px; color: #94a3b8; }
+    .stars { color: #f59e0b; font-size: 13px; margin-bottom: 6px; }
+    .review-text { font-size: 13px; color: #64748b; line-height: 1.6; margin-bottom: 0.75rem; }
+    .review-source { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; }
+    .review-source svg { width: 14px; height: 14px; }
+    .btn-review { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: #1d4ed8; border: 2px solid #1d4ed8; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+    .btn-review:hover { background: #1d4ed8; color: #fff; }
+
+    /* CONTACT + MAP */
+    .contact-section { background: #f8fafc; }
+    .contact-map-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 2rem; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; background: #fff; }
+    .contact-left { padding: 2rem; }
+    .contact-form label { font-size: 13px; font-weight: 500; color: #1e293b; display: block; margin-bottom: 4px; }
+    .contact-form input, .contact-form textarea, .contact-form select { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; font-family: inherit; margin-bottom: 1rem; transition: border 0.2s; background: #fff; }
+    .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { outline: none; border-color: #3b82f6; }
+    .contact-form textarea { resize: vertical; min-height: 100px; }
+    .contact-btn-row { display: flex; gap: 0.75rem; }
+    .contact-form .btn-submit { flex: 1; background: #1d4ed8; color: #fff; border: none; padding: 14px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .contact-form .btn-submit:hover { background: #1e40af; }
+    .contact-right { position: relative; min-height: 500px; display: flex; flex-direction: column; }
+    .contact-right iframe { flex: 1; width: 100%; border: none; min-height: 0; }
+    .contact-right .map-bottom { background: #0a1628; padding: 1.25rem 1.5rem; }
+    .contact-right .map-info { display: flex; flex-direction: column; gap: 6px; }
+    .contact-right .map-info span { color: #cbd5e1; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+    .contact-right .map-info strong { color: #fff; }
+    .contact-right .map-info i { color: #93c5fd; font-size: 16px; flex-shrink: 0; }
+    .port-tag { display: inline-flex; align-items: center; gap: 6px; background: #1e3a8a; color: #93c5fd; font-size: 12px; font-weight: 500; padding: 5px 10px; border-radius: 5px; margin-top: 8px; }
+    .port-tag strong { color: #fff; }
+    .btn-hitta-hit { display: inline-flex; align-items: center; gap: 8px; background: #1d4ed8; color: #fff; padding: 10px 18px; border-radius: 6px; font-size: 13px; font-weight: 500; text-decoration: none; transition: background 0.2s; margin-top: 10px; }
+    .btn-hitta-hit:hover { background: #1e40af; }
+    .contact-success { display: none; text-align: center; padding: 2rem 0; }
+    .contact-success i { font-size: 48px; color: #22c55e; margin-bottom: 1rem; }
+    .contact-success h4 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .contact-success p { color: #64748b; font-size: 14px; }
+
+    /* BEFORE/AFTER */
+    .ba-section { padding: 4rem 2rem; }
+    .ba-inner { max-width: 920px; margin: 0 auto; }
+    .ba-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+    .ba-instagram { display: inline-flex; align-items: center; gap: 8px; color: #1d4ed8; font-size: 14px; font-weight: 500; text-decoration: none; transition: color 0.2s; }
+    .ba-instagram:hover { color: #1e40af; }
+    .ba-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+    .ba-card { border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; background: #fff; }
+    .ba-slider { position: relative; width: 100%; aspect-ratio: 16/10; overflow: hidden; cursor: col-resize; user-select: none; -webkit-user-select: none; }
+    .ba-slider img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    .ba-slider .ba-after { clip-path: inset(0 0 0 50%); }
+    .ba-slider .ba-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; background: #fff; z-index: 2; transform: translateX(-50%); box-shadow: 0 0 8px rgba(0,0,0,0.3); }
+    .ba-slider .ba-handle::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 36px; height: 36px; background: #fff; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .ba-slider .ba-handle .ba-arrows { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; display: flex; gap: 2px; color: #1d4ed8; font-size: 14px; font-weight: 700; }
+    .ba-slider .ba-label { position: absolute; bottom: 10px; padding: 4px 10px; background: rgba(10,22,40,0.7); color: #fff; font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; border-radius: 4px; z-index: 2; }
+    .ba-slider .ba-label-before { left: 10px; }
+    .ba-slider .ba-label-after { right: 10px; }
+    .ba-card-info { padding: 1rem; }
+    .ba-card-title { font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 2px; }
+    .ba-card-desc { font-size: 13px; color: #94a3b8; }
+
+    /* INFO BAR */
+    .info-bar { background: #0a1628; padding: 2rem; display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+    .info-item { display: flex; align-items: center; gap: 8px; color: #94a3b8; font-size: 14px; }
+    .info-item i { color: #3b82f6; font-size: 18px; }
+    .info-item strong { color: #fff; }
+
+    /* CTA BANNER */
+    .cta-banner { background: #0f1f3d; padding: 4rem 2rem; text-align: center; }
+    .cta-banner h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 500; color: #fff; margin-bottom: 0.5rem; }
+    .cta-banner p { color: #64748b; margin-bottom: 2rem; font-size: 15px; }
+    .cta-phone { display: inline-flex; align-items: center; gap: 10px; background: #1d4ed8; color: #fff; padding: 14px 28px; border-radius: 6px; font-size: 1rem; font-weight: 500; text-decoration: none; transition: background 0.2s; }
+    .cta-phone:hover { background: #1e40af; }
+
+    /* FOOTER */
+    .footer { background: #0a1628; border-top: 1px solid #1e293b; padding: 2rem; text-align: center; }
+    .footer p { color: #475569; font-size: 13px; }
+
+    .divider { height: 1px; background: #e2e8f0; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav { flex-wrap: wrap; gap: 1rem; }
+      .nav-links { display: none; }
+      .contact-map-grid { grid-template-columns: 1fr; }
+      .contact-right { min-height: 300px; }
+      .contact-btn-row { flex-direction: column; }
+      .ba-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon"><i class="ti ti-car"></i></div>
+      MARDINSSON AB
+    </a>
+    <div class="nav-links">
+      <a href="#tjanster">Tjänster</a>
+      <a href="#resultat">Resultat</a>
+      <a href="#recensioner">Recensioner</a>
+      <a href="#kontakt">Kontakt</a>
+    </div>
+    <div class="nav-right">
+      <a href="tel:0764106067" class="nav-phone"><i class="ti ti-phone"></i> 076-410 60 67</a>
+      <div class="nav-hours" style="display:flex;align-items:center;gap:8px;">Mån–fre 09:00–17:00 <a href="https://www.instagram.com/mardinssonab/" target="_blank" rel="noopener" style="color:#93c5fd;font-size:16px;"><i class="ti ti-brand-instagram"></i></a></div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-eyebrow">Bilskadecenter i Helsingborg</div>
+    <h1 class="hero-title">Krockskada på bilen?<br><span>Vi löser det.</span></h1>
+    <p class="hero-sub">Professionell plåt, lackering och skadereparation. Industrigatan 97, Helsingborg.</p>
+    <a href="tel:0764106067" class="hero-cta">
+      <i class="ti ti-phone"></i> Ring för offert
+    </a>
+    <div class="badge-row">
+      <div class="badge"><i class="ti ti-check"></i> Försäkringsärenden</div>
+      <div class="badge"><i class="ti ti-check"></i> Alla fordonstyper</div>
+      <div class="badge"><i class="ti ti-check"></i> Garanti på arbetet</div>
+    </div>
+  </section>
+
+  <div class="section" id="tjanster">
+    <div class="section-label">Tjänster</div>
+    <h2 class="section-title">Allt vi erbjuder</h2>
+    <p class="section-body">Vi reparerar alla typer av skador på bilar och andra fordon – oavsett hur stor eller liten skadan är. Klicka på en tjänst för att läsa mer.</p>
+    <div class="services-grid">
+      <div class="service-card" onclick="openService(0)">
+        <div class="service-icon"><i class="ti ti-droplet"></i></div>
+        <div class="service-name">Lackering</div>
+        <div class="service-short">Exakt färgmatchning</div>
+        <div class="read-more">Läs mer <i class="ti ti-arrow-right"></i></div>
+      </div>
+      <div class="service-card" onclick="openService(1)">
+        <div class="service-icon"><i class="ti ti-tool"></i></div>
+        <div class="service-name">Plåtreparation</div>
+        <div class="service-short">Bucklor & deformationer</div>
+        <div class="read-more">Läs mer <i class="ti ti-arrow-right"></i></div>
+      </div>
+      <div class="service-card" onclick="openService(2)">
+        <div class="service-icon"><i class="ti ti-shield"></i></div>
+        <div class="service-name">Rostreparation</div>
+        <div class="service-short">Stoppa rostangrepp</div>
+        <div class="read-more">Läs mer <i class="ti ti-arrow-right"></i></div>
+      </div>
+      <div class="service-card" onclick="openService(3)">
+        <div class="service-icon"><i class="ti ti-puzzle"></i></div>
+        <div class="service-name">Plastreparation</div>
+        <div class="service-short">Stötfångare & kåpor</div>
+        <div class="read-more">Läs mer <i class="ti ti-arrow-right"></i></div>
+      </div>
+      <div class="service-card" onclick="openService(4)">
+        <div class="service-icon"><i class="ti ti-circle"></i></div>
+        <div class="service-name">Fälgrenovering</div>
+        <div class="service-short">Trottoarkantskador & lack</div>
+        <div class="read-more">Läs mer <i class="ti ti-arrow-right"></i></div>
+      </div>
+      <div class="service-card" onclick="openService(5)">
+        <div class="service-icon"><i class="ti ti-sun"></i></div>
+        <div class="service-name">Strålkastarrenovering</div>
+        <div class="service-short">Gulnade & matta glas</div>
+        <div class="read-more">Läs mer <i class="ti ti-arrow-right"></i></div>
+      </div>
+      <div class="service-card" onclick="openService(6)">
+        <div class="service-icon"><i class="ti ti-disc"></i></div>
+        <div class="service-name">Bromsok lackering</div>
+        <div class="service-short">Personlig touch</div>
+        <div class="read-more">Läs mer <i class="ti ti-arrow-right"></i></div>
+      </div>
+      <div class="service-card" onclick="openService(7)">
+        <div class="service-icon"><i class="ti ti-sparkles"></i></div>
+        <div class="service-name">Polering</div>
+        <div class="service-short">Repor & oxidering</div>
+        <div class="read-more">Läs mer <i class="ti ti-arrow-right"></i></div>
+      </div>
+      <div class="service-card" onclick="openService(8)">
+        <div class="service-icon"><i class="ti ti-layers"></i></div>
+        <div class="service-name">Lackskydd</div>
+        <div class="service-short">Keramisk coating</div>
+        <div class="read-more">Läs mer <i class="ti ti-arrow-right"></i></div>
+      </div>
+      <div class="service-card" onclick="openService(9)">
+        <div class="service-icon"><i class="ti ti-zoom-in"></i></div>
+        <div class="service-name">Stenskottsreparation</div>
+        <div class="service-short">Vindrutor & lack</div>
+        <div class="read-more">Läs mer <i class="ti ti-arrow-right"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service Modal -->
+  <div class="modal-overlay" id="serviceModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeService()"><i class="ti ti-x"></i></button>
+      <div class="modal-icon" id="modalIcon"></div>
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+      <ul id="modalList"></ul>
+      <a href="tel:0764106067" class="modal-cta"><i class="ti ti-phone"></i> Boka tid</a>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">Så enkelt är det</div>
+    <h2 class="section-title">Tre steg till en hel bil</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Kontakta oss</div>
+        <div class="step-desc">Ring eller kom förbi – vi bedömer skadan och ger dig en offert direkt.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Vi reparerar</div>
+        <div class="step-desc">Professionellt arbete med rätt material och exakt färgmatchning.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Hämta bilen</div>
+        <div class="step-desc">Bilen är som ny och du kör vidare – vi garanterar resultatet.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ba-section" id="resultat">
+    <div class="ba-inner">
+      <div class="ba-header">
+        <div>
+          <div class="section-label">Före & efter</div>
+          <h2 class="section-title">Se resultatet själv</h2>
+          <p class="section-body">Dra i reglaget för att se skillnaden. Fler exempel hittar du på vår Instagram.</p>
+        </div>
+        <a href="https://www.instagram.com/mardinssonab/" target="_blank" rel="noopener" class="ba-instagram">
+          <i class="ti ti-brand-instagram"></i> Följ oss på Instagram
+        </a>
+      </div>
+      <div class="ba-grid">
+        <div class="ba-card">
+          <div class="ba-slider" data-ba>
+            <img class="ba-before" src="https://placehold.co/600x375/1e293b/94a3b8?text=F%C3%B6re" alt="Före reparation" />
+            <img class="ba-after" src="https://placehold.co/600x375/1d4ed8/ffffff?text=Efter" alt="Efter reparation" />
+            <div class="ba-handle"><div class="ba-arrows">◂ ▸</div></div>
+            <span class="ba-label ba-label-before">Före</span>
+            <span class="ba-label ba-label-after">Efter</span>
+          </div>
+          <div class="ba-card-info">
+            <div class="ba-card-title">Krockskada – höger framdörr</div>
+            <div class="ba-card-desc">Plåtreparation & lackering</div>
+          </div>
+        </div>
+        <div class="ba-card">
+          <div class="ba-slider" data-ba>
+            <img class="ba-before" src="https://placehold.co/600x375/1e293b/94a3b8?text=F%C3%B6re" alt="Före reparation" />
+            <img class="ba-after" src="https://placehold.co/600x375/1d4ed8/ffffff?text=Efter" alt="Efter reparation" />
+            <div class="ba-handle"><div class="ba-arrows">◂ ▸</div></div>
+            <span class="ba-label ba-label-before">Före</span>
+            <span class="ba-label ba-label-after">Efter</span>
+          </div>
+          <div class="ba-card-info">
+            <div class="ba-card-title">Rostskada – bakskärm</div>
+            <div class="ba-card-desc">Rostreparation, svetsning & omlackering</div>
+          </div>
+        </div>
+        <div class="ba-card">
+          <div class="ba-slider" data-ba>
+            <img class="ba-before" src="https://placehold.co/600x375/1e293b/94a3b8?text=F%C3%B6re" alt="Före reparation" />
+            <img class="ba-after" src="https://placehold.co/600x375/1d4ed8/ffffff?text=Efter" alt="Efter reparation" />
+            <div class="ba-handle"><div class="ba-arrows">◂ ▸</div></div>
+            <span class="ba-label ba-label-before">Före</span>
+            <span class="ba-label ba-label-after">Efter</span>
+          </div>
+          <div class="ba-card-info">
+            <div class="ba-card-title">Fälgrenovering – 18" aluminiumfälgar</div>
+            <div class="ba-card-desc">Slipning, lagning & omlackering</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews" id="recensioner">
+    <div class="reviews-inner">
+      <div class="reviews-header">
+        <div>
+          <div class="section-label">Recensioner</div>
+          <h2 class="section-title">Vad kunderna säger på Google</h2>
+          <div class="google-rating">
+            <svg class="google-logo" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            <div class="google-rating-number">5.0</div>
+            <div class="google-rating-detail">
+              <div class="google-rating-stars">★★★★★</div>
+              <div class="google-rating-count">Baserat på Google-recensioner</div>
+            </div>
+          </div>
+        </div>
+        <a href="https://www.google.com/maps/search/Mardinsson+Bilskadecenter+AB+Helsingborg" target="_blank" rel="noopener" class="btn-review">
+          <svg width="16" height="16" viewBox="0 0 48 48" style="flex-shrink:0"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Lämna recension
+        </a>
+      </div>
+      <div class="reviews-scroll-wrap">
+        <div class="scroll-zone scroll-zone-left" id="scrollLeft"></div>
+        <div class="scroll-zone scroll-zone-right" id="scrollRight"></div>
+        <div class="reviews-grid" id="reviewsGrid">
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#0891b2">V</div><div class="review-meta"><div class="review-author">Vivian Bellotti</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Det är så lätt att smasha bilen, händer så snabbt. Det var min tur för 10 dagar sedan… men sån tur jag hade att få träffa superbra Mardinssons."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#d97706">F</div><div class="review-meta"><div class="review-author">Fille</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Riktigt bra arbete, jag blev förvånad hur bra resultatet blev. Ser ut som en helt ny dörr efter jobbet, och lacken är identisk med resten av bilen, samma färg."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#7c3aed">O</div><div class="review-meta"><div class="review-author">Omar</div><div class="review-date">för 2 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Fantastiskt arbete. Jag är mycket nöjd med lackeringsarbetet som utfördes av Mardinssons bilskadecenter. De var professionella, snabba och resultatet blev utmärkt. Jag rekommenderar dem varmt till alla som behöver lackeringsjobb av högsta kvalitet."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar">L</div><div class="review-meta"><div class="review-author">lalle</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Lämnade in en helt ny olackerad front för lackering samt montering, blev väldigt nöjd med lackering &amp; montering och det gick väldigt snabbt. Ägaren var väldigt proffsig, trevlig och har väldigt bra priser."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#059669">P</div><div class="review-meta"><div class="review-author">Peter Forssman</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Det gick snabbt och enkelt att få tid för att åtgärda parkeringsskadan på dörren. Resultatet blev utmärkt och skadan på fälgen fixades dessutom som en extra bonus."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#d97706">F</div><div class="review-meta"><div class="review-author">Fabbe K</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Mycket proffsigt och bra gjort. Väldigt noggrann och bilen blev bättre än från fabrik! Rekommenderar starkt och jag skulle lätt gått hit igen!"</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#7c3aed">M</div><div class="review-meta"><div class="review-author">Massivo</div><div class="review-date">för 4 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Jag har lämnat in 2 bilar hos Mardinsson, den ena med repor på kofångaren och den andra med en buckla i kofångaren och har fått tillbaka bilarna i nybilskick!"</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#dc2626">C</div><div class="review-meta"><div class="review-author">Caesar Ahlborn</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Ännu ett besök hos Mardinsson! Även denna gång ett fantastiskt trevligt bemötande och mycket proffessionellt utfört arbete. Rekommenderas varmt!"</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#be185d">M</div><div class="review-meta"><div class="review-author">mirko nika</div><div class="review-date">för 4 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Jag lämnade in mina fälgar för lackering och blev riktigt nöjd, det gick snabbt och enkelt kommer definitivt komma tillbaka i framtiden. Riktigt bra jobbat!"</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#4f46e5">N</div><div class="review-meta"><div class="review-author">Neamat Aksoy</div><div class="review-date">för 5 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Mardinsson bilskadecenter ab utför ett professionellt jobb. Jag och min man är jätte nöjda med resultatet. Jag rekommenderar alla som har skador på sina bilar."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#0891b2">A</div><div class="review-meta"><div class="review-author">Adnan Kahwi</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Tack för din service, du gjorde ett fantastiskt jobb, min bil blev som ny igen, jag trodde inte mina ögon att jag kommer se min bil som ny igen, jag mycket tacksam för din service."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#059669">S</div><div class="review-meta"><div class="review-author">Stefan Olsson</div><div class="review-date">för 2 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Fixade en buckla på min bil utan att behöva lacka om hela bagageluckan."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#dc2626">Y</div><div class="review-meta"><div class="review-author">Yaseen Hamdan</div><div class="review-date">för 5 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"I came from Norway for one week visit to Sweden. During my visit, I repaired my car at Mardinsson bilskadecenter. They are very professional in doing their job."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#4f46e5">P</div><div class="review-meta"><div class="review-author">Per Winberg</div><div class="review-date">för 2 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Så proffsigt, duktig och antagligen den bästa i Helsingborg. Vänlig och bra pris. Högsta betyg."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#d97706">K</div><div class="review-meta"><div class="review-author">Kabbe-</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Väldigt nöjd med lackeringen, väldigt professionell lackerare, mycket bra service, bra pris!"</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#0891b2">I</div><div class="review-meta"><div class="review-author">ibrahim alsayasena</div><div class="review-date">för 5 år sedan</div></div></div><div class="stars">★★★★☆</div><p class="review-text">"Fick ett fint bemötande av personalen dessutom utför jobbet på proffsig nivå och lagom priser. Rekommenderar starkt."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#059669">B</div><div class="review-meta"><div class="review-author">Birgitta Sandberg</div><div class="review-date">för 4 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Mycket positivt… bilen ser nästan finare ut, nu än innan krocken."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#7c3aed">S</div><div class="review-meta"><div class="review-author">Sebastian Hjortsberg</div><div class="review-date">för 4 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Grym service och kan verkligen rekommendera dem till andra. Kommer att lämna mina andra bilar där framöver."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#dc2626">A</div><div class="review-meta"><div class="review-author">Anna E</div><div class="review-date">för 5 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Mycket snabb och bra service. Han gjorde ett bra jobb, var mycket trevlig och vi är supernöjda!"</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#be185d">D</div><div class="review-meta"><div class="review-author">Daniel Kepec</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Proffslackat, rent och snyggt i verkstaden det talar om att det är seriöst. Rekommenderar att lämna in bilen på Mardinsson."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#4f46e5">V</div><div class="review-meta"><div class="review-author">Vlad Lionte</div><div class="review-date">för 4 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Mycket professionellt utfört arbete och trevligt bemötande av personalen. Rekommenderar starkt!"</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#0891b2">B</div><div class="review-meta"><div class="review-author">Bilkanalen</div><div class="review-date">för 4 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Ett företag som alltid håller hög kvalitet."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#d97706">K</div><div class="review-meta"><div class="review-author">Karl Aulin</div><div class="review-date">för 4 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Service på en helt ny nivå, otroligt imponerad."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#7c3aed">J</div><div class="review-meta"><div class="review-author">Joakim Törnqvist</div><div class="review-date">för 4 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Fantastisk service och grymt resultat till ett bra pris! Rekommenderas!!!"</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#dc2626">D</div><div class="review-meta"><div class="review-author">Daniel Aksoy</div><div class="review-date">för 5 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Kort väntetid samt fint jobb."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#be185d">O</div><div class="review-meta"><div class="review-author">Omar Makie</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Mycket bra jobb. Extremt nöjd."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#4f46e5">A</div><div class="review-meta"><div class="review-author">Ahmed Hashad</div><div class="review-date">för 5 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Best service in a short time with a high quality finish."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+        <div class="review-card"><div class="review-card-header"><div class="review-avatar" style="background:#059669">C</div><div class="review-meta"><div class="review-author">cop andersson</div><div class="review-date">för 3 år sedan</div></div></div><div class="stars">★★★★★</div><p class="review-text">"Kanon service! Kontaktade Fabbe på Mardinsson bilskadecenter och fick svar omgående med pris."</p><div class="review-source"><svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google-recension</div></div>
+
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KONTAKT & KARTA -->
+  <div class="contact-section" id="kontakt">
+    <div class="section" style="max-width: 1100px;">
+      <div class="section-label">Kontakt & hitta hit</div>
+      <h2 class="section-title">Hör av dig eller besök oss</h2>
+      <p class="section-body">Fyll i formuläret så hör vi av oss inom kort, eller kom förbi oss på Industrigatan 97.</p>
+      <div class="contact-map-grid">
+        <div class="contact-left">
+          <div class="contact-form" id="contactFormWrap">
+            <form onsubmit="submitContact(event)" id="contactForm">
+              <label>Namn</label>
+              <input type="text" placeholder="Ditt namn" required />
+              <label>Telefon</label>
+              <input type="tel" placeholder="07X-XXX XX XX" required />
+              <label>E-post</label>
+              <input type="email" placeholder="din@email.se" />
+              <label>Typ av ärende</label>
+              <select>
+                <option value="">Välj ärende...</option>
+                <option>Offertförfrågan</option>
+                <option>Försäkringsärende</option>
+                <option>Boka tid</option>
+                <option>Övrigt</option>
+              </select>
+              <label>Meddelande</label>
+              <textarea placeholder="Beskriv din skada eller fråga..." required></textarea>
+              <div class="contact-btn-row">
+                <button type="submit" class="btn-submit"><i class="ti ti-send"></i> Skicka</button>
+              </div>
+            </form>
+            <div class="contact-success" id="contactSuccess">
+              <i class="ti ti-circle-check"></i>
+              <h4>Tack för ditt meddelande!</h4>
+              <p>Vi hör av oss inom kort. Du kan även ringa oss direkt på 076-410 60 67.</p>
+            </div>
+          </div>
+        </div>
+        <div class="contact-right">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2210.5!2d12.7!3d56.05!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4652719e0a0a0a0a%3A0x0!2sIndustrigatan%2097%2C%20254%2064%20Helsingborg!5e0!3m2!1ssv!2sse!4v1"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+          <div class="map-bottom">
+            <div class="map-info">
+              <span><i class="ti ti-map-pin"></i> Industrigatan 97, Helsingborg</span>
+              <span><i class="ti ti-clock"></i> Mån–fre 09:00–17:00</span>
+              <span><i class="ti ti-phone"></i> <strong>076-410 60 67</strong></span>
+            </div>
+            <div class="port-tag"><i class="ti ti-info-circle"></i> Kör in på Industrigatan – vi sitter i <strong>port 17</strong></div>
+            <a href="https://www.google.com/maps/dir//Industrigatan+97,+254+64+Helsingborg" target="_blank" rel="noopener" class="btn-hitta-hit"><i class="ti ti-navigation"></i> Hitta hit – vägbeskrivning</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-bar">
+    <div class="info-item"><i class="ti ti-clock"></i> <strong>Mån–fre</strong>&nbsp;09:00–17:00</div>
+    <div class="info-item"><i class="ti ti-map-pin"></i> Industrigatan 97, port 17, Helsingborg</div>
+    <div class="info-item"><i class="ti ti-phone"></i> <strong>076-410 60 67</strong></div>
+  </div>
+
+  <div class="cta-banner">
+    <h2>Redo att fixa skadan?</h2>
+    <p>Ring oss idag – vi hjälper dig snabbt och till rätt pris.</p>
+    <a href="tel:0764106067" class="cta-phone">
+      <i class="ti ti-phone"></i> 076-410 60 67
+    </a>
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2024 Mardinsson Bilskadecenter AB. Alla rättigheter förbehållna. <a href="https://www.instagram.com/mardinssonab/" target="_blank" rel="noopener" style="color:#93c5fd;text-decoration:none;margin-left:6px;"><i class="ti ti-brand-instagram"></i> Instagram</a></p>
+  </div>
+
+  <script>
+    // Service data
+    const services = [
+      {
+        icon: '<i class="ti ti-droplet"></i>',
+        title: 'Lackering',
+        desc: 'Vi erbjuder professionell billackering med exakt färgmatchning. Oavsett om det gäller en liten repa eller en hel omlackering, använder vi högkvalitativa material och avancerad teknik för att ge din bil ett felfritt resultat.',
+        points: ['Datoriserad färgmatchning för perfekt resultat', 'Hela och dellackeringar', 'Miljövänliga vattenbaserade lacker', 'Lackering av enskilda paneler eller hela bilen']
+      },
+      {
+        icon: '<i class="ti ti-tool"></i>',
+        title: 'Plåtreparation',
+        desc: 'Bucklor, deformationer och krockskador – vi rättar till karossens plåt och återställer bilen till originalskick. Vi använder både traditionell plåtbearbetning och PDR-teknik (Paintless Dent Repair) beroende på skadans karaktär.',
+        points: ['Krockskadereparation', 'Buckelriktning (PDR)', 'Byte av karosspaneler', 'Arbete enligt tillverkarens specifikationer']
+      },
+      {
+        icon: '<i class="ti ti-shield"></i>',
+        title: 'Rostreparation',
+        desc: 'Rost kan snabbt sprida sig och orsaka allvarliga skador om den inte åtgärdas. Vi tar bort rostangripen metall, svetsar in ny plåt vid behov och behandlar ytan med rostskydd för att förhindra framtida problem.',
+        points: ['Borttagning av rostangripen metall', 'Svetsning av ny plåt', 'Rostskyddsbehandling', 'Hålrumsbehandling för långtidsskydd']
+      },
+      {
+        icon: '<i class="ti ti-puzzle"></i>',
+        title: 'Plastreparation',
+        desc: 'Moderna bilar har många plastdetaljer – stötfångare, sidospeglar, kåpor och spoilers. Vi reparerar sprickor, hål och deformationer i plast, ofta till en bråkdel av priset jämfört med att köpa nya delar.',
+        points: ['Stötfångarreparation', 'Lagning av sprickor och hål', 'Återformning av deformerad plast', 'Kostnadseffektivt alternativ till nytt delsbyte']
+      },
+      {
+        icon: '<i class="ti ti-circle"></i>',
+        title: 'Fälgrenovering',
+        desc: 'Repiga eller skadade fälgar kan dra ner bilens utseende rejält. Vi slipar, fyller och omlackerar dina fälgar så att de ser ut som nya. Vi hanterar alla typer av lättmetallfälgar.',
+        points: ['Reparation av trottoarkantskador', 'Omlackering i valfri kulör', 'Slipning och polering', 'Behandling av alla fälgstorlekar']
+      },
+      {
+        icon: '<i class="ti ti-sun"></i>',
+        title: 'Strålkastarrenovering',
+        desc: 'Gulnade eller matta strålkastarglas försämrar både utseendet och ljusstyrkan. Vi sliper och polerar dina strålkastare så att de blir klara igen och ger full ljusstyrka – ett måste för trafiksäkerheten.',
+        points: ['Borttagning av gulnad och oxidering', 'Slipning och polering av plastglas', 'UV-skyddslack för långvarigt resultat', 'Förbättrad sikt och trafiksäkerhet']
+      },
+      {
+        icon: '<i class="ti ti-disc"></i>',
+        title: 'Bromsok lackering',
+        desc: 'Ge din bil en personlig touch med lackerade bromsok. Vi demonterar, rengör, primerbehandlar och lackerar dina bromsok i valfri kulör med värmetålig lack som klarar höga temperaturer.',
+        points: ['Demontering och noggrann rengöring', 'Värmetålig speciallack (upp till 300°C)', 'Valfri kulör – rött, svart, gult, blått m.m.', 'Professionell montering och kontroll']
+      },
+      {
+        icon: '<i class="ti ti-sparkles"></i>',
+        title: 'Polering',
+        desc: 'Med maskinpolering tar vi bort ytliga repor, oxidering, svallmärken och andra defekter i lacken. Resultatet är en djup glans och en yta som ser fabriksny ut. Perfekt som underhåll eller förberedelse innan lackskydd.',
+        points: ['Borttagning av ytliga repor och swirls', 'Flerstegsspolering för maximalt resultat', 'Lackrenovering vid kraftig oxidering', 'Perfekt förberedelse inför keramisk coating']
+      },
+      {
+        icon: '<i class="ti ti-layers"></i>',
+        title: 'Lackskydd',
+        desc: 'Skydda din bils lack med keramisk coating eller lackskyddsfilm. Coatingen skapar ett hårt skydd mot repor, smuts, UV-strålar och kemikalier, och gör bilen enklare att tvätta och hålla ren.',
+        points: ['Keramisk coating med flera års hållbarhet', 'Skydd mot repor, fågelspillning och UV', 'Hydrofob yta som stöter bort vatten', 'Lackskyddsfilm (PPF) för utsatta ytor']
+      },
+      {
+        icon: '<i class="ti ti-zoom-in"></i>',
+        title: 'Stenskottsreparation',
+        desc: 'Små stenskott i vindrutan kan snabbt bli till stora sprickor om de inte åtgärdas. Vi reparerar stenskott snabbt och effektivt med injektionsteknik – ofta klart inom 30 minuter.',
+        points: ['Snabb reparation, ofta under 30 minuter', 'Injektionsteknik med specialharts', 'Förhindrar att skadan sprider sig', 'Godkänd av försäkringsbolag']
+      }
+    ];
+
+    function openService(index) {
+      const s = services[index];
+      document.getElementById('modalIcon').innerHTML = s.icon;
+      document.getElementById('modalTitle').textContent = s.title;
+      document.getElementById('modalDesc').textContent = s.desc;
+      const list = document.getElementById('modalList');
+      list.innerHTML = s.points.map(p => '<li>' + p + '</li>').join('');
+      document.getElementById('serviceModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeService() {
+      document.getElementById('serviceModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Contact form
+    function submitContact(e) {
+      e.preventDefault();
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('contactSuccess').style.display = 'block';
+    }
+
+    // Close modals on overlay click
+    document.getElementById('serviceModal').addEventListener('click', function(e) {
+      if (e.target === this) closeService();
+    });
+
+    // Close modals on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeService();
+      }
+    });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Reviews hover-scroll
+    (function() {
+      const grid = document.getElementById('reviewsGrid');
+      const left = document.getElementById('scrollLeft');
+      const right = document.getElementById('scrollRight');
+      let scrollInterval = null;
+      const speed = 28;
+
+      function startScroll(dir) {
+        stopScroll();
+        scrollInterval = setInterval(function() {
+          grid.scrollLeft += dir * speed;
+        }, 10);
+      }
+      function stopScroll() {
+        if (scrollInterval) { clearInterval(scrollInterval); scrollInterval = null; }
+      }
+
+      left.addEventListener('mouseenter', function() { startScroll(-1); });
+      left.addEventListener('mouseleave', stopScroll);
+      right.addEventListener('mouseenter', function() { startScroll(1); });
+      right.addEventListener('mouseleave', stopScroll);
+
+      left.addEventListener('touchstart', function() { startScroll(-1); }, { passive: true });
+      left.addEventListener('touchend', stopScroll);
+      right.addEventListener('touchstart', function() { startScroll(1); }, { passive: true });
+      right.addEventListener('touchend', stopScroll);
+    })();
+
+    // Before/After sliders
+    document.querySelectorAll('[data-ba]').forEach(slider => {
+      const afterImg = slider.querySelector('.ba-after');
+      const handle = slider.querySelector('.ba-handle');
+      let dragging = false;
+
+      function updatePosition(x) {
+        const rect = slider.getBoundingClientRect();
+        let pct = ((x - rect.left) / rect.width) * 100;
+        pct = Math.max(5, Math.min(95, pct));
+        afterImg.style.clipPath = 'inset(0 0 0 ' + pct + '%)';
+        handle.style.left = pct + '%';
+      }
+
+      slider.addEventListener('mousedown', function(e) { dragging = true; updatePosition(e.clientX); });
+      window.addEventListener('mousemove', function(e) { if (dragging) { e.preventDefault(); updatePosition(e.clientX); } });
+      window.addEventListener('mouseup', function() { dragging = false; });
+
+      slider.addEventListener('touchstart', function(e) { dragging = true; updatePosition(e.touches[0].clientX); }, { passive: true });
+      window.addEventListener('touchmove', function(e) { if (dragging) updatePosition(e.touches[0].clientX); }, { passive: true });
+      window.addEventListener('touchend', function() { dragging = false; });
+    });
+  </script>
+
+</body>
+</html>
